@@ -6,6 +6,7 @@ export interface Movie {
   filmCompanyId: string;
   cost: number;
   releaseYear: number;
+  companyName: string;
 }
 
 export interface MovieContextType {

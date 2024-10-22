@@ -1,4 +1,4 @@
-import { fetchMovies } from './api';
+import { fetchMovies } from '../api';
 
 global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>;
 

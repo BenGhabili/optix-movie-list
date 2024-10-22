@@ -10,3 +10,11 @@ export const fetchMovies = async () => {
 
     return response.json();
 };
+
+export const fetchMovieCompanies = async () => {
+  const response = await fetch(`${BASE_URL}/movieCompanies`);
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+  return response.json();
+};

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { fetchMovies } from '../api/api';
+import { fetchMovies, fetchMovieCompanies } from '../api/api';
+import { retryFetch } from '../helpers/apiHelper';
 
 import type { MovieContextType, Movie } from '../types/MovieInterfce';
 
@@ -13,10 +14,18 @@ export const MovieProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const data = await fetchMovies();
-      setMovies(data);
+
+      const movieData = await retryFetch(fetchMovies, 3, 1000);
+      const companyData = await retryFetch(fetchMovieCompanies, 3, 1000);
+
+      const mergedMovies = movieData.map((movie: Movie) => {
+        const company = companyData.find((company: { id: string }) => company.id === movie.filmCompanyId);
+        return { ...movie, companyName: company ? company.name : 'Unknown Company' };
+      });
+
+      setMovies(mergedMovies);
     } catch (error) {
-      setError('Failed to fetch movies.');
+      setError('Failed to fetch movies and company data after multiple attempts');
     } finally {
       setLoading(false);
     }
