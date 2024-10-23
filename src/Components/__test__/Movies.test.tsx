@@ -65,11 +65,4 @@ describe('Movies', () => {
 
     expect(getByText('Mocked Movie List')).toBeTruthy();
   });
-
-  it('should render the mocked movie review component', () => {
-    mockUseMovies();
-    const { getByText } = render(<Movies />);
-
-    expect(getByText('Mocked Movie Review')).toBeTruthy();
-  });
 });

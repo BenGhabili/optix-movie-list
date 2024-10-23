@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react';
+import { render, RenderResult } from '@testing-library/react';
 import MovieList from '../MovieList';
-import type { Movie, MovieContextType } from '../../types/MovieInterfce';
+import type { Movie } from '../../types/MovieInterfce';
 
 const moviesArray: Movie[] = [
   { id: '1', title: 'foo1', reviews: [1,2,3], cost: 123, filmCompanyId: '1', releaseYear: 1990, companyName: 'company1' },
@@ -8,29 +8,41 @@ const moviesArray: Movie[] = [
 ];
 
 const mockSelectHandler = () => jest.fn();
+const mockHandleKeyDown = () => jest.fn();
 
 describe('MovieList', () => {
+  let renderedComponent: RenderResult;
+
+  beforeEach(() => {
+    renderedComponent = render(
+      <MovieList
+        movies={moviesArray}
+        handleSelect={mockSelectHandler}
+        handleKeyDown={mockHandleKeyDown}
+        selectedMovie={moviesArray[0]}
+      />);
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders correctly', () => {
-    const { container } = render(<MovieList movies={moviesArray} handleSelect={mockSelectHandler} />);
+    const { container } = renderedComponent;
 
     expect(container).toBeTruthy();
   });
 
   it('renders the correct information', () => {
-    const { getByText } = render(<MovieList movies={moviesArray} handleSelect={mockSelectHandler} />);
+    const { getByText } = renderedComponent;
 
     expect(getByText('foo1')).toBeTruthy();
   });
 
   it('renders the correct numbers of entries', () => {
-    const { getByTestId } = render(<MovieList movies={moviesArray} handleSelect={mockSelectHandler} />);
+    const { getAllByRole } = renderedComponent;
 
-    expect(getByTestId('movie-list').children).toHaveLength(2);
+    const rows = getAllByRole('row');
+    expect(rows).toHaveLength(4);
   });
-
-  // @todo may add more tests, handleSelect and reviews
 });

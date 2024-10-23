@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useMovies } from '../hooks/useMovies';
 import MovieList from './MovieList';
-import MovieReview from './MovieReview';
 
 import { Movie } from '../types/MovieInterfce';
 
@@ -10,7 +9,17 @@ const Movies = () => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   const handleSelect = (movie: Movie) => {
-    setSelectedMovie(movie);
+    if (selectedMovie === movie) {
+      setSelectedMovie(null);
+    } else {
+      setSelectedMovie(movie);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, movie: Movie) => {
+    if (e.key === 'Enter') {
+      handleSelect(movie);
+    }
   };
 
   const refreshButton = (buttonText: any) => {
@@ -34,9 +43,12 @@ const Movies = () => {
             <h2>Welcome to Movie database!</h2>
             {refreshButton("Refresh")}
             <p>Total movies displayed {movies.length}</p>
-            <span>Title - Review - Film Company</span>
-            <MovieList movies={movies} handleSelect={handleSelect} />
-            <MovieReview selectedMovie={selectedMovie} />
+            <MovieList
+              movies={movies}
+              handleSelect={handleSelect}
+              handleKeyDown={handleKeyDown}
+              selectedMovie={selectedMovie}
+            />
           </div>
         )
       }
