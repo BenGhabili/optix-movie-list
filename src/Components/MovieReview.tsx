@@ -4,16 +4,20 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { useMediaQuery } from '@mui/material';
 
 interface MovieReviewProps {
   movieTitle: string;
+  handleModalClose: () => void;
 }
 
-const MovieReview = ({ movieTitle }: MovieReviewProps) => {
+const MovieReview = ({ movieTitle, handleModalClose }: MovieReviewProps) => {
   const [reviewText, setReviewText] = useState('');
   const [reviewScore, setReviewScore] = useState<number | ''>('');
   const [errorText, setErrorText] = useState<string | null>(null);
   const [errorScore, setErrorScore] = useState<string | null>(null);
+
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputText = e.target.value;
@@ -34,6 +38,7 @@ const MovieReview = ({ movieTitle }: MovieReviewProps) => {
     } else {
       setErrorText(null);
       setErrorScore(null);
+      handleModalClose();
       // todo make request to backend
       console.log('Review submitted:', { reviewText, reviewScore });
     }
@@ -42,7 +47,7 @@ const MovieReview = ({ movieTitle }: MovieReviewProps) => {
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2} alignItems="center">
-        <Grid item xs={8}>
+        <Grid item xs={12} md={7}>
           <TextField
             fullWidth
             label={`Leave a review for ${movieTitle}`}
@@ -50,18 +55,25 @@ const MovieReview = ({ movieTitle }: MovieReviewProps) => {
             value={reviewText}
             onChange={handleTextChange}
             placeholder="Write your review"
+            multiline={isMobile}
+            rows={isMobile ? 3 : 1}
             margin="normal"
             error={!!errorText}
             helperText={`${reviewText.length}/100`}
             inputProps={{
               maxLength: 100,
-              style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
+              style: {
+                // whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }
             }}
           />
         </Grid>
         <Grid
           item
-          xs={2}
+          xs={4}
+          md={2}
           sx={{
             height: "118px"
           }}

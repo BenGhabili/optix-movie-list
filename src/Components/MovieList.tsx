@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useMediaQuery } from '@mui/material';
 import MovieReview from './MovieReview';
 import type { Movie } from "../types/MovieInterfce";
 
@@ -27,9 +28,11 @@ interface MovieListProps {
   handleSelect: (movie: Movie) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, movie: Movie) => void;
   selectedMovie: Movie | null;
+  handleModalClose: () => void;
 }
 
-const MovieList = ({ movies, handleSelect, handleKeyDown, selectedMovie }: MovieListProps) => {
+const MovieList = ({ movies, handleSelect, handleKeyDown, selectedMovie, handleModalClose }: MovieListProps) => {
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const calculateReview = (reviewArray: number[]): string => {
     if (reviewArray.length === 0) {
@@ -65,10 +68,10 @@ const MovieList = ({ movies, handleSelect, handleKeyDown, selectedMovie }: Movie
                     <StyledTableCell>{calculateReview(movie.reviews)}</StyledTableCell>
                     <StyledTableCell>{movie.companyName}</StyledTableCell>
                   </StyledTableRow>
-                  {selectedMovie?.id === movie.id && (
+                  {!isMobile && selectedMovie?.id === movie.id && (
                     <TableRow>
                       <TableCell colSpan={3}>
-                        <MovieReview movieTitle={movie.title} />
+                        <MovieReview movieTitle={movie.title} handleModalClose={handleModalClose}/>
                       </TableCell>
                     </TableRow>
                   )}
