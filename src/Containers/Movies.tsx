@@ -33,15 +33,15 @@ const Movies = () => {
           <PageLoader />
         </Box>
       ) : null}
-      {!loading && movies?.length > 0 &&
+      {!loading &&
         (
           <div>
-            <h2>Welcome to Movie database!</h2>
-            {refreshButton("Refresh")}
+            <h1>Welcome to Movie database!</h1>
+            {refreshButton('Refresh')}
             <p>Total movies displayed {movies.length}</p>
             <MovieList movies={movies} isMobile={isMobile} />
             {selectedMovie && isMobile && (
-              <MovieReviewModal movieTitle={selectedMovie.title} />
+              <MovieReviewModal movie={selectedMovie} />
             )}
           </div>
         )

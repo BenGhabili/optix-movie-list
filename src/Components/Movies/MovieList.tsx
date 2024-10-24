@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react';
-import styled from '@emotion/styled';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,21 +7,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
+import { useTheme } from '@mui/material/styles';
 import MovieReview from './MovieReview';
 import type { Movie } from "../../types/MovieInterfce";
 import { useMovies } from "../../hooks/useMovies";
+import {
+  TitleTableRow,
+  StyledTableRow,
+  StyledTableCell,
+  StyledSortCell
+} from './styles/MovieList.styles';
 
-const StyledTableRow = styled(TableRow)<{ selected: boolean }>`
-  cursor: pointer;
-  background-color: ${({ selected }) => (selected ? '#f5f5f5' : 'transparent')};
-  &:hover {
-    background-color: #e0e0e0;
-  }
-`;
-
-const StyledTableCell = styled(TableCell)`
-  padding: 16px;
-`;
 
 interface MovieListProps {
   movies: Movie[];
@@ -30,9 +25,11 @@ interface MovieListProps {
 }
 
 const MovieList = ({ movies, isMobile }: MovieListProps) => {
-  const [order, setOrder] = useState<'asc' | 'desc'>('asc');  // Sort order (ascending/descending)
+  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [orderBy, _] = useState<'reviews'>('reviews');
-  const { selectedMovie, handleSelect, handleKeyDown, handleModalClose } = useMovies();
+  const { selectedMovie, handleSelect, handleKeyDown } = useMovies();
+
+  const theme = useTheme();
 
   const calculateReview = (reviewArray: number[]): string => {
     if (reviewArray.length === 0) {
@@ -59,19 +56,29 @@ const MovieList = ({ movies, isMobile }: MovieListProps) => {
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: '650px' }} aria-label="movie list table">
+        <Table
+          sx={{
+            minWidth: '100%',
+            [theme.breakpoints.up('md')]: {
+              minWidth: '600px',
+            },
+          }}
+          aria-label="movie list table"
+        >
           <TableHead>
-            <TableRow>
+            <TitleTableRow>
               <StyledTableCell component="th">Title</StyledTableCell>
-              <TableSortLabel
-                active={orderBy === 'reviews'}
-                direction={order}
-                onClick={handleSortRequest}
-              >
-                Review
-              </TableSortLabel>
-              <StyledTableCell component="th">Film company</StyledTableCell>
-            </TableRow>
+              <StyledSortCell component="th">
+                <TableSortLabel
+                  active={orderBy === 'reviews'}
+                  direction={order}
+                  onClick={handleSortRequest}
+                >
+                  Review
+                </TableSortLabel>
+              </StyledSortCell>
+              {!isMobile && (<StyledTableCell component="th">Film company</StyledTableCell>)}
+            </TitleTableRow>
           </TableHead>
           <TableBody data-testid="movie-list">
             {movies.length > 0 ? (
@@ -86,12 +93,12 @@ const MovieList = ({ movies, isMobile }: MovieListProps) => {
                   >
                     <StyledTableCell>{movie.title}</StyledTableCell>
                     <StyledTableCell>{calculateReview(movie.reviews)}</StyledTableCell>
-                    <StyledTableCell>{movie.companyName}</StyledTableCell>
+                    <StyledTableCell>{isMobile && 'Company: '}{movie.companyName}</StyledTableCell>
                   </StyledTableRow>
                   {!isMobile && selectedMovie?.id === movie.id && (
                     <TableRow>
                       <TableCell colSpan={3}>
-                        <MovieReview movieTitle={movie.title} />
+                        <MovieReview movie={movie} />
                       </TableCell>
                     </TableRow>
                   )}

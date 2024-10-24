@@ -3,12 +3,13 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { useMovies } from '../../hooks/useMovies';
 import MovieReview from './MovieReview';
+import { Movie } from '../../types/MovieInterfce';
 
 interface MovieReviewModalProps {
-  movieTitle: string;
+  movie: Movie;
 }
 
-const MovieReviewModal = ({ movieTitle }: MovieReviewModalProps) => {
+const MovieReviewModal = ({ movie }: MovieReviewModalProps) => {
   const { isModalOpen, handleModalClose } = useMovies();
 
   return (
@@ -26,7 +27,7 @@ const MovieReviewModal = ({ movieTitle }: MovieReviewModalProps) => {
           borderRadius: '8px',
         }}
       >
-        <MovieReview movieTitle={movieTitle} />
+        <MovieReview movie={movie} />
       </Box>
     </Modal>
   );

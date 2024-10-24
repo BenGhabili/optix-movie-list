@@ -5,13 +5,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useMediaQuery } from '@mui/material';
-import {useMovies} from "../../hooks/useMovies";
+import { useMovies } from '../../hooks/useMovies';
+import { submitReviewToService } from '../../api/api';
+import type { Movie } from '../../types/MovieInterfce';
 
 interface MovieReviewProps {
-  movieTitle: string;
+  movie: Movie;
 }
 
-const MovieReview = ({ movieTitle }: MovieReviewProps) => {
+const MovieReview = ({ movie }: MovieReviewProps) => {
   const [reviewText, setReviewText] = useState('');
   const [reviewScore, setReviewScore] = useState<number | ''>('');
   const [errorText, setErrorText] = useState<string | null>(null);
@@ -30,7 +32,7 @@ const MovieReview = ({ movieTitle }: MovieReviewProps) => {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (reviewText.length > 100) {
       setErrorText('Review text must not exceed 100 characters!');
@@ -40,8 +42,13 @@ const MovieReview = ({ movieTitle }: MovieReviewProps) => {
       setErrorText(null);
       setErrorScore(null);
       handleModalClose();
-      // todo make request to backend
-      console.log('Review submitted:', { reviewText, reviewScore });
+
+      const submitted = await submitReviewToService({ movieId: movie.id, reviewText });
+
+      if (submitted) {
+        // This will be replaced with a success message notifier or alert...
+        console.log('Review submitted:', { reviewText, reviewScore });
+      }
     }
   };
 
@@ -51,7 +58,7 @@ const MovieReview = ({ movieTitle }: MovieReviewProps) => {
         <Grid item xs={12} md={7}>
           <TextField
             fullWidth
-            label={`Leave a review for ${movieTitle}`}
+            label={`Leave a review for ${movie.title}`}
             variant="outlined"
             value={reviewText}
             onChange={handleTextChange}
@@ -64,7 +71,6 @@ const MovieReview = ({ movieTitle }: MovieReviewProps) => {
             inputProps={{
               maxLength: 100,
               style: {
-                // whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis'
               }
