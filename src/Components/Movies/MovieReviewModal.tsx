@@ -1,19 +1,18 @@
 import React from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-
+import { useMovies } from '../hooks/useMovies';
 import MovieReview from './MovieReview';
 
 interface MovieReviewModalProps {
-  open: boolean;
-  handleClose: () => void;
   movieTitle: string;
 }
 
-const MovieReviewModal = ({ open, handleClose, movieTitle }: MovieReviewModalProps) => {
-  console.log('Open: ', open);
+const MovieReviewModal = ({ movieTitle }: MovieReviewModalProps) => {
+  const { isModalOpen, handleModalClose } = useMovies();
+
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={isModalOpen} onClose={handleModalClose}>
       <Box
         sx={{
           position: 'absolute',
@@ -27,7 +26,7 @@ const MovieReviewModal = ({ open, handleClose, movieTitle }: MovieReviewModalPro
           borderRadius: '8px',
         }}
       >
-        <MovieReview movieTitle={movieTitle} handleModalClose={handleClose} />
+        <MovieReview movieTitle={movieTitle} />
       </Box>
     </Modal>
   );

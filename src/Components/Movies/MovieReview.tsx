@@ -5,18 +5,19 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useMediaQuery } from '@mui/material';
+import {useMovies} from "../hooks/useMovies";
 
 interface MovieReviewProps {
   movieTitle: string;
-  handleModalClose: () => void;
 }
 
-const MovieReview = ({ movieTitle, handleModalClose }: MovieReviewProps) => {
+const MovieReview = ({ movieTitle }: MovieReviewProps) => {
   const [reviewText, setReviewText] = useState('');
   const [reviewScore, setReviewScore] = useState<number | ''>('');
   const [errorText, setErrorText] = useState<string | null>(null);
   const [errorScore, setErrorScore] = useState<string | null>(null);
 
+  const { handleModalClose } = useMovies();
   const isMobile = useMediaQuery('(max-width:600px)');
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import styled from '@emotion/styled';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -6,10 +6,11 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import { useMediaQuery } from '@mui/material';
 import MovieReview from './MovieReview';
 import type { Movie } from "../types/MovieInterfce";
+import { useMovies } from "../hooks/useMovies";
 
 const StyledTableRow = styled(TableRow)<{ selected: boolean }>`
   cursor: pointer;
@@ -25,14 +26,13 @@ const StyledTableCell = styled(TableCell)`
 
 interface MovieListProps {
   movies: Movie[];
-  handleSelect: (movie: Movie) => void;
-  handleKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, movie: Movie) => void;
-  selectedMovie: Movie | null;
-  handleModalClose: () => void;
+  isMobile: boolean;
 }
 
-const MovieList = ({ movies, handleSelect, handleKeyDown, selectedMovie, handleModalClose }: MovieListProps) => {
-  const isMobile = useMediaQuery('(max-width:600px)');
+const MovieList = ({ movies, isMobile }: MovieListProps) => {
+  const [order, setOrder] = useState<'asc' | 'desc'>('asc');  // Sort order (ascending/descending)
+  const [orderBy, _] = useState<'reviews'>('reviews');
+  const { selectedMovie, handleSelect, handleKeyDown, handleModalClose } = useMovies();
 
   const calculateReview = (reviewArray: number[]): string => {
     if (reviewArray.length === 0) {
@@ -42,6 +42,20 @@ const MovieList = ({ movies, handleSelect, handleKeyDown, selectedMovie, handleM
     return (totalOfArray / reviewArray.length).toFixed(1);
   };
 
+  const handleSortRequest = () => {
+    const isAsc = order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+  };
+
+  const sortedMovies = movies.slice().sort((a, b) => {
+    const reviewA = calculateReview(a.reviews);
+    const reviewB = calculateReview(b.reviews);
+    if (order === 'asc') {
+      return reviewA < reviewB ? -1 : 1;
+    }
+    return reviewA > reviewB ? -1 : 1;
+  });
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -49,13 +63,19 @@ const MovieList = ({ movies, handleSelect, handleKeyDown, selectedMovie, handleM
           <TableHead>
             <TableRow>
               <StyledTableCell component="th">Title</StyledTableCell>
-              <StyledTableCell component="th">Review</StyledTableCell>
+              <TableSortLabel
+                active={orderBy === 'reviews'}
+                direction={order}
+                onClick={handleSortRequest}
+              >
+                Review
+              </TableSortLabel>
               <StyledTableCell component="th">Film company</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody data-testid="movie-list">
             {movies.length > 0 ? (
-              movies.map((movie) => (
+              sortedMovies.map((movie) => (
                 <Fragment key={movie.id}>
                   <StyledTableRow
                     key={movie.id}
@@ -71,7 +91,7 @@ const MovieList = ({ movies, handleSelect, handleKeyDown, selectedMovie, handleM
                   {!isMobile && selectedMovie?.id === movie.id && (
                     <TableRow>
                       <TableCell colSpan={3}>
-                        <MovieReview movieTitle={movie.title} handleModalClose={handleModalClose}/>
+                        <MovieReview movieTitle={movie.title} />
                       </TableCell>
                     </TableRow>
                   )}

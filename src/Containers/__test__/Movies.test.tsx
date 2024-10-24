@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
 import Movies from '../Movies';
-import { useMovies } from '../../hooks/useMovies';
+import { useData } from '../../hooks/useData';
 import type { Movie, MovieContextType } from '../../types/MovieInterfce';
 
-jest.mock('../../hooks/useMovies');
+jest.mock('../../hooks/useData');
 
 jest.mock('../MovieList', () => ({
   __esModule: true,
@@ -24,7 +24,7 @@ const moviesArray: Movie[] = [
 
 describe('Movies', () => {
   const mockUseMovies = (override?: Partial<MovieContextType>) => {
-    (useMovies as jest.Mock).mockReturnValue({
+    (useData as jest.Mock).mockReturnValue({
       movies: moviesArray,
       error: null,
       loading: false,
