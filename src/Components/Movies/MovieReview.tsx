@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useMediaQuery } from '@mui/material';
-import {useMovies} from "../hooks/useMovies";
+import {useMovies} from "../../hooks/useMovies";
 
 interface MovieReviewProps {
   movieTitle: string;

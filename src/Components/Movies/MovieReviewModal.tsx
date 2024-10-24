@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { useMovies } from '../hooks/useMovies';
+import { useMovies } from '../../hooks/useMovies';
 import MovieReview from './MovieReview';
 
 interface MovieReviewModalProps {

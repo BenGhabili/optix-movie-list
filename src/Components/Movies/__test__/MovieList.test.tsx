@@ -1,6 +1,6 @@
 import { render, RenderResult } from '@testing-library/react';
 import MovieList from '../MovieList';
-import type { Movie } from '../../types/MovieInterfce';
+import type { Movie } from '../../../types/MovieInterfce';
 
 const moviesArray: Movie[] = [
   { id: '1', title: 'foo1', reviews: [1,2,3], cost: 123, filmCompanyId: '1', releaseYear: 1990, companyName: 'company1' },

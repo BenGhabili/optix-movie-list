@@ -1,8 +1,10 @@
 import React from 'react';
 import { useMediaQuery } from '@mui/material';
+import Box from '@mui/material/Box';
 import { useData } from '../hooks/useData';
-import MovieList from './MovieList';
-import MovieReviewModal from './MovieReviewModal';
+import MovieList from '../Components/Movies/MovieList';
+import PageLoader from '../Components/UI/PageLoader';
+import MovieReviewModal from '../Components/Movies/MovieReviewModal';
 import { useMovies } from "../hooks/useMovies";
 
 const Movies = () => {
@@ -21,12 +23,16 @@ const Movies = () => {
   };
 
   if (error) {
-    return <div>An error occurred</div>;
+    throw new Error('Error while fetching movies');
   }
 
   return (
     <div style={{ padding: '10px 5px' }}>
-      {loading ? <div>Loading ...</div> : null}
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <PageLoader />
+        </Box>
+      ) : null}
       {!loading && movies?.length > 0 &&
         (
           <div>

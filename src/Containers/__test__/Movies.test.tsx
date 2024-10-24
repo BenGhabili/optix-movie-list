@@ -5,12 +5,12 @@ import type { Movie, MovieContextType } from '../../types/MovieInterfce';
 
 jest.mock('../../hooks/useData');
 
-jest.mock('../MovieList', () => ({
+jest.mock('../../Components/Movies/MovieList', () => ({
   __esModule: true,
   default: () => <div>Mocked Movie List</div>,
 }));
 
-jest.mock('../MovieReview', () => ({
+jest.mock('../../Components/Movies/MovieReview', () => ({
   __esModule: true,
   default: () => <div>Mocked Movie Review</div>,
 }));
