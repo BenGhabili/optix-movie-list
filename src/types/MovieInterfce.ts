@@ -4,8 +4,8 @@ export interface Movie {
   title: string;
   reviews: number[];
   filmCompanyId: string;
-  cost: number;
-  releaseYear: number;
+  cost?: number;
+  releaseYear?: number;
   companyName: string;
 }
 
@@ -13,4 +13,5 @@ export interface MovieContextType {
   movies: Movie[];
   loading: boolean;
   error: string | null;
+  reloadData: () => void;
 }

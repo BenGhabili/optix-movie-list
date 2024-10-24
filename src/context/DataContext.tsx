@@ -15,8 +15,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setLoading(true);
 
-      const movieData = await retryFetch(fetchMovies, 3, 1000);
-      const companyData = await retryFetch(fetchMovieCompanies, 3, 1000);
+      const [movieData, companyData] = await Promise.all([
+        retryFetch(fetchMovies, 3, 1000),
+        retryFetch(fetchMovieCompanies, 3, 1000)
+      ]);
 
       const mergedMovies = movieData.map((movie: Movie) => {
         const company = companyData.find((company: { id: string }) => company.id === movie.filmCompanyId);
@@ -35,8 +37,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     fetchData();
   }, []);
 
+  const reloadData = () => fetchData();
+
   return (
-    <DataContext.Provider value={{ movies, loading, error }}>
+    <DataContext.Provider value={{ movies, loading, error, reloadData }}>
       {children}
     </DataContext.Provider>
   );

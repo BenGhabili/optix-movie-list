@@ -24,11 +24,13 @@ export const StyledTableRow = styled(TableRow)<{ selected: boolean }>`
 `;
 
 export const StyledTableCell = styled(TableCell)`
-  padding: 16px;
+  &.MuiTableCell-head {
+    font-weight: bold;
+  }
 
   @media (max-width: 600px) {
     &:nth-of-type(1) {
-      flex-basis: 40%;
+      flex-basis: 50%;
     }
 
     &:nth-of-type(2) {

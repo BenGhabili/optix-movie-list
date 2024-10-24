@@ -1,15 +1,17 @@
 import React, { Fragment, useState } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Paper from '@mui/material/Paper';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Paper
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import MovieReview from './MovieReview';
-import type { Movie } from "../../types/MovieInterfce";
+import type { Movie } from '../../types/MovieInterfce';
 import { useMovies } from "../../hooks/useMovies";
 import {
   TitleTableRow,
