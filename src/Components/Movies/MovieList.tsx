@@ -9,8 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import MovieReview from './MovieReview';
-import type { Movie } from "../types/MovieInterfce";
-import { useMovies } from "../hooks/useMovies";
+import type { Movie } from "../../types/MovieInterfce";
+import { useMovies } from "../../hooks/useMovies";
 
 const StyledTableRow = styled(TableRow)<{ selected: boolean }>`
   cursor: pointer;
@@ -59,7 +59,7 @@ const MovieList = ({ movies, isMobile }: MovieListProps) => {
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="movie list table">
+        <Table sx={{ minWidth: '650px' }} aria-label="movie list table">
           <TableHead>
             <TableRow>
               <StyledTableCell component="th">Title</StyledTableCell>
